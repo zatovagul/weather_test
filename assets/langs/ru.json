@@ -1,3 +1,10 @@
 {
-  "weather": "Weather"
+  "weather": "Погода",
+  "city": "Город",
+  "temperature": "Температура",
+  "hourly": "Почасово",
+  "daily": "Посуточно",
+  "feels_like": "Чувствуется как",
+  "day": "День",
+  "night": "Ночь"
 }

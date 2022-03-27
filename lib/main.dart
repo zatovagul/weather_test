@@ -44,9 +44,11 @@ class MyApp extends StatelessWidget {
           }
         ),
         supportedLocales: const [
-          Locale.fromSubtags(languageCode: 'ru'),
-          Locale.fromSubtags(languageCode: 'en')
+          Locale("ru"),
+          Locale("en"),
         ],
-        path: 'assets/langs');
+        fallbackLocale: const Locale("en"),
+        path: 'assets/langs'
+    );
   }
 }
