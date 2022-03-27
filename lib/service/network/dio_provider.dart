@@ -1,5 +1,7 @@
 
 import 'package:dio/dio.dart';
+import 'package:weather_test/common/constant/app_constants.dart';
+import 'package:weather_test/common/util/logger.dart';
 
 /// Провайдер Dio с настройками.
 class DioProvider{
@@ -19,6 +21,8 @@ class DioProvider{
       InterceptorsWrapper(
         onRequest: (RequestOptions options, handler) async {
           try {
+            options.queryParameters['appid'] = AppConstants.openWeatherMapApiKey;
+            logger.i(options.uri);
             return handler.next(options);
           } catch (e) {
             print(e);
