@@ -1,62 +1,52 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:weather_test/common/constant/app_constants.dart';
+import 'package:weather_test/common/constant/app_navigation.dart';
+import 'package:weather_test/di/service_locator.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  await initServiceLocator();
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+  static final _navigatorGlobalKey = GlobalKey<NavigatorState>();
+  static NavigatorState get navigatorState {
+    if (_navigatorGlobalKey.currentState == null) {
+      throw 'can\'t provide NavigatorState as it isn\'t created yet or already disposed';
+    }
+    return _navigatorGlobalKey.currentState!;
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    return EasyLocalization(
+        child: Builder(
+          builder: (context) {
+            return MaterialApp(
+              title: AppConstants.appTitle,
+              theme: ThemeData(primarySwatch: Colors.blue,),
+              localizationsDelegates: context.localizationDelegates,
+              locale: context.locale,
+              supportedLocales: context.supportedLocales,
+              navigatorKey: _navigatorGlobalKey,
+              initialRoute: AppNavigation.initialRoute,
+              onGenerateRoute: AppNavigation.onGenerateRoute,
+            );
+          }
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        supportedLocales: const [
+          Locale.fromSubtags(languageCode: 'ru'),
+          Locale.fromSubtags(languageCode: 'en')
+        ],
+        path: 'assets/langs');
   }
 }
